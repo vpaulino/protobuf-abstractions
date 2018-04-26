@@ -43,11 +43,11 @@ namespace Protobuff.Schemas
         {
             IEnumerable<string> headersByLine = ParseHeaders(typeInfo);
 
-            AddToHashSet(ref existingHeaders, headersByLine);
+            Save(ref existingHeaders, headersByLine);
 
             IEnumerable<string> bodyTypes = ParseTypeAndRelatedMessages(typeInfo);
 
-            AddToHashSet(ref body, bodyTypes);
+            Save(ref body, bodyTypes);
 
         }
 
@@ -67,7 +67,7 @@ namespace Protobuff.Schemas
             return bodyTypes;
         }
 
-        private void AddToHashSet(ref HashSet<string> container, IEnumerable<string> values)
+        private void Save(ref HashSet<string> container, IEnumerable<string> values)
         {
             foreach (var value in values)
             {
