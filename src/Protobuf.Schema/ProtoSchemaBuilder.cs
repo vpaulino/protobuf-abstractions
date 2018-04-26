@@ -53,14 +53,14 @@ namespace Protobuff.Schemas
 
         private IEnumerable<string> ParseHeaders(Type typeInfo)
         {
-            var typeHeader = schemaRender.RenderSchemaHeader(typeInfo);
+            var typeHeader = schemaRender.RenderHeader(typeInfo);
             var headersByLine = typeHeader.Split(Environment.NewLine.ToCharArray()).Where(str => !String.IsNullOrEmpty(str));
             return headersByLine;
         }
 
         private IEnumerable<string> ParseTypeAndRelatedMessages(Type typeInfo)
         {
-            var schemaRelatedTypes = schemaRender.RenderSchemaBody(typeInfo);
+            var schemaRelatedTypes = schemaRender.RenderBody(typeInfo);
             var bodyTypes = schemaRelatedTypes.Split(new string[] { $"{Environment.NewLine}message" }, StringSplitOptions.RemoveEmptyEntries)
                                                 .Select<string, string>((stringToken) => string.IsNullOrWhiteSpace(stringToken) ? string.Empty : $"{Environment.NewLine}message {stringToken}")
                                                 .Where(line => !string.IsNullOrWhiteSpace(line));

@@ -8,9 +8,9 @@ namespace Protobuff.Schemas
 
         string Render(Type type);
 
-        string RenderSchemaHeader(Type type);
+        string RenderHeader(Type type);
 
-        string RenderSchemaBody(Type type);
+        string RenderBody(Type type);
 
     }
 }

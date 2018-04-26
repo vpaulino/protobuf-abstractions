@@ -21,6 +21,22 @@ namespace Protobuff.Schemas
             this.Sintax = sintax;
         }
 
+        protected virtual string SelectLines(string schema, Func<string, bool> lineFilter)
+        {
+            if (string.IsNullOrEmpty(schema))
+                return string.Empty;
+
+            string[] resultSchema = schema
+                            .Split(Environment.NewLine.ToCharArray())
+                            .Where(lineFilter)
+                            .ToArray();
+
+            var finalSchema = String.Join(Environment.NewLine, resultSchema);
+
+            return finalSchema;
+        }
+
+
         public string Render<T>()
         {
 
@@ -28,11 +44,7 @@ namespace Protobuff.Schemas
             string schema = ProtoBuf.Serializer.GetProto<T>(Sintax);
             return schema;
 
-        }
-
-        
-
-
+        } 
         
         public string Render(Type type)
         {
@@ -54,14 +66,14 @@ namespace Protobuff.Schemas
           
         }
 
-        public string RenderSchemaHeader(Type type)
+        public string RenderHeader(Type type)
         {
             var schema = Render(type);
             string headers = SelectLines(schema, (line) => Regex.IsMatch(line.TrimStart(), "^(package|import|syntax)"));
             return headers;
         }
 
-        public string RenderSchemaBody(Type type)
+        public string RenderBody(Type type)
         {
             var schema = Render(type);
 
@@ -73,20 +85,7 @@ namespace Protobuff.Schemas
 
 
 
-        protected virtual string SelectLines(string schema, Func<string, bool> lineFilter)
-        {
-            if (string.IsNullOrEmpty(schema))
-                return string.Empty;
-
-            string[] resultSchema = schema
-                            .Split(Environment.NewLine.ToCharArray())
-                            .Where(lineFilter)
-                            .ToArray();
-
-            var finalSchema = String.Join(Environment.NewLine, resultSchema);
-
-            return finalSchema;
-        }
+      
     }
 
    
