@@ -56,7 +56,7 @@ var otherASsemblies = LoadedFromDirectory();
 ````                     
                      
                      
-Some of the methods are available on a set of overloads as showned in the following diagram:
+The methods  available to suport the fluent API are showned in the following diagram. 
 
 ![UML_Fluent](https://go.gliffy.com/go/share/image/s33x9h6el0erowtm4y5u.png?utm_medium=live-embed&utm_source=custom) 
 
