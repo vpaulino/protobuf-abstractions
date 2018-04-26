@@ -38,3 +38,5 @@ var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contai
 String fullSchema = protoSchemaBuilder.BuildSchema(types);
 
 ```
+## FluentApi 
+
