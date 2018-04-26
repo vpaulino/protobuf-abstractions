@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/vpaulino/protobuf-abstractions.png)](https://travis-ci.org/vpaulino/protobuf-abstractions)
+
 # protobuf-abstractions
 a set of funcionalities to deal with proto serialization
 
