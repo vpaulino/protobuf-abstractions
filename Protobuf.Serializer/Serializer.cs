@@ -3,6 +3,9 @@ using System.IO;
 
 namespace Protobuf.Serializer
 {
+    /// <summary>
+    /// Serialize and deserializes instances of objects to byte[] protobuff format
+    /// </summary>
     public class Serializer
     {
         /// <summary>

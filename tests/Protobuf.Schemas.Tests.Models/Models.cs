@@ -42,14 +42,14 @@ namespace Protobuf.Schemas.Tests.Models
         public DateTime Created { get; set; }
     }
 
-    [DataContract]
+    [ProtoBuf.ProtoContract]
     public class ExtendedData : Data
     {
         [DataMember(Order = 3)]
-        Dictionary<string, object> Extended { get; set; }
+        public Dictionary<string, object> Extended { get; set; }
 
-        [DataMember(Order = 4)]
-        Processes WorkToDo { get; set; }
+        [ProtoBuf.ProtoMember(tag: 4, Options = ProtoBuf.MemberSerializationOptions.Required)]
+        public Processes WorkToDo { get; set; }
     }
 
     [KnownType(typeof(Processes))]
