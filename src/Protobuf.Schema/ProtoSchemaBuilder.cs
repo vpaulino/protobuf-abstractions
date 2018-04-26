@@ -39,13 +39,13 @@ namespace Protobuff.Schemas
 
         }
 
-        protected virtual void GenerateProto(Type typeInfo, ref HashSet<string> existingHeaders, ref HashSet<string> body)
+        protected virtual void ParseTypeSchema(Type typeInfo, ref HashSet<string> existingHeaders, ref HashSet<string> body)
         {
             IEnumerable<string> headersByLine = ParseHeaders(typeInfo);
 
             AddToHashSet(ref existingHeaders, headersByLine);
 
-            IEnumerable<string> bodyTypes = ParseSchemaTypes(typeInfo);
+            IEnumerable<string> bodyTypes = ParseTypeAndRelatedMessages(typeInfo);
 
             AddToHashSet(ref body, bodyTypes);
 
@@ -58,7 +58,7 @@ namespace Protobuff.Schemas
             return headersByLine;
         }
 
-        private IEnumerable<string> ParseSchemaTypes(Type typeInfo)
+        private IEnumerable<string> ParseTypeAndRelatedMessages(Type typeInfo)
         {
             var schemaRelatedTypes = schemaRender.RenderSchemaBody(typeInfo);
             var bodyTypes = schemaRelatedTypes.Split(new string[] { $"{Environment.NewLine}message" }, StringSplitOptions.RemoveEmptyEntries)
@@ -104,7 +104,7 @@ namespace Protobuff.Schemas
             HashSet<string> bodySchema = new HashSet<string>();
             HashSet<string> headers = new HashSet<string>();
 
-            GenerateProto(typeInfo, ref headers, ref bodySchema);
+            ParseTypeSchema(typeInfo, ref headers, ref bodySchema);
 
             string finalSchema = Build(headers, bodySchema);
             return finalSchema;
@@ -118,7 +118,7 @@ namespace Protobuff.Schemas
  
             foreach (var typeInfo in typesInfo)
             {
-                GenerateProto(typeInfo, ref headers, ref bodySchema);
+                ParseTypeSchema(typeInfo, ref headers, ref bodySchema);
             }
         
              
@@ -127,7 +127,7 @@ namespace Protobuff.Schemas
 
         }
 
-        public string BuildSchema(Assembly assembly)
+        public virtual string BuildSchema(Assembly assembly)
         {
             assembly.GetTypes();
             var schema = BuildSchema(assembly.GetTypes().Select<Type, TypeInfo>((t)=> t.GetTypeInfo()));
