@@ -8,7 +8,7 @@ os:
 # .NET CLI require Ubuntu 14.04
 dist: trusty
 # Ensure that .NET Core is installed
-dotnet: 1.0.4
+dotnet: 2.1.104
 # Ensure Mono is installed
 # mono: latest
 env:

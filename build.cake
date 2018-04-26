@@ -137,7 +137,7 @@ Task("Build-AND-Test")
 
 
 Task("TravisCI")
-    .IsDependentOn("Build-AND-Test");
+    .IsDependentOn("Full-Build");
     
 
 Task("Default")

@@ -16,7 +16,7 @@
     <ProjectReference Include="..\Protobuf.Schemas.Tests.Models\Protobuf.Schemas.Tests.Models.csproj" />
   </ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
 		<PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
 	</ItemGroup>
 
