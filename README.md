@@ -33,10 +33,31 @@ ISchemaRender protoSchemaRender = new ProtoSchemaRender()
 ISchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder(protoSchemaRender);
 
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contains());
+var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contains("MyModelNamespace"));
 
 String fullSchema = protoSchemaBuilder.BuildSchema(types);
 
-```
+````
+
 ## FluentApi 
+
+This sdk makes available a Set of extensions methods in the PRotobuf.Schemas.Fluent namespace that enable a fluent utilization of the available funcionality. This fluent API is suported by a scope type that maintains the context of the fluent calls until the end. 
+To start the chain of any fluent calls the class ProtobufSchemaBuilder makes available a static method called Start that returns an instance of SchemaBuilderScope and from there is possible to start use the extensions methods available in the static class SchemaBuilderScopeExtensions. 
+
+````
+
+var myAssemblies =  AppDomain.CurrentDomain.GetAssemblies();
+var otherASsemblies = LoadedFromDirectory();
+ await ProtobufSchemaBuilder.Start()
+                     .FetchTypes(myAssemblies.FirstOrDefault(),t => t.Namespace.Contains("MyModelNamespace"))
+                     .AddTypes(otherASsemblies.Where(/*some criteria */).FirstOrDefault(),t => t.Namespace.Contains("namespace") )
+                     .BuildSchema(ProtoBuf.Meta.ProtoSyntax.3)
+                     .WriteSchemaAsync(filePath);
+````                     
+                     
+                     
+
+
+
+
 
