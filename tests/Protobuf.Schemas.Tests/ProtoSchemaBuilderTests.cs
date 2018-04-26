@@ -66,8 +66,7 @@ namespace Protobuf.Schemas.Tests
             ProtobuffSchemaRender schemaRender = new ProtobuffSchemaRender(ProtoBuf.Meta.ProtoSyntax.Proto3);
 
             ProtoSchemaBuilder builder = new ProtoSchemaBuilder(schemaRender);
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
+          
             var assemblyFiles = Directory.GetFiles(Environment.CurrentDirectory);
             var modelAssembly = assemblyFiles.Where((file) => file.Contains("Protobuf")).ToList();
 

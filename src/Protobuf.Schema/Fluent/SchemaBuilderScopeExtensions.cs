@@ -12,10 +12,10 @@ namespace Protobuff.Schemas.Fluent
     {
         public static SchemaBuilderScope FetchTypes(this SchemaBuilderScope scope, string assembliesPath)
         {
-            return FetchTypesBy(scope, assembliesPath, (filename) => true);
+            return FetchTypes(scope, assembliesPath, (filename) => true);
         }
 
-        public static SchemaBuilderScope FetchTypesBy(this SchemaBuilderScope scope, string assembliesPath, Func<string, bool> predicate)
+        public static SchemaBuilderScope FetchTypes(this SchemaBuilderScope scope, string assembliesPath, Func<string, bool> predicate)
         {
             var assemblyFiles = Directory.GetFiles(assembliesPath).Where(predicate);
             List<Type> types = new List<Type>();
@@ -41,10 +41,31 @@ namespace Protobuff.Schemas.Fluent
             return scope;
         }
 
-        public static SchemaBuilderScope BuildSchema(this SchemaBuilderScope scope)
+        public static SchemaBuilderScope FetchTypes(this SchemaBuilderScope scope, Assembly assembly, Func<Type, bool> predicate)
         {
 
-            ProtoSchemaBuilder builder = new ProtoSchemaBuilder();
+            List<Type> types = new List<Type>();
+
+            types.AddRange(assembly.DefinedTypes.Where(predicate));
+
+            scope.Types = types;
+
+            return scope;
+        }
+
+        public static SchemaBuilderScope AddTypes(this SchemaBuilderScope scope, IEnumerable<Type> types, Func<Type, bool> predicate)
+        {
+            scope.Types.AddRange(types.Where(predicate));
+
+            return scope;
+        }
+
+
+
+        public static SchemaBuilderScope BuildSchema(this SchemaBuilderScope scope, ProtoBuf.Meta.ProtoSyntax sintax = ProtoBuf.Meta.ProtoSyntax.Proto2)
+        {
+            ISchemaRender render = new ProtobuffSchemaRender(sintax);
+            ProtoSchemaBuilder builder = new ProtoSchemaBuilder(render);
             string schema = builder.BuildSchema(scope.Types);
 
             scope.Schema = schema;
