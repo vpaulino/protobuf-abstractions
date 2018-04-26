@@ -1,5 +1,6 @@
 
 [![Build Status](https://travis-ci.org/vpaulino/protobuf-abstractions.png)](https://travis-ci.org/vpaulino/protobuf-abstractions)
+[![Coverage Status](https://coveralls.io/repos/github/vpaulino/protobuf-abstractions/badge.svg?branch=master)](https://coveralls.io/github/vpaulino/protobuf-abstractions?branch=master)
 
 # protobuf-abstractions
 a set of funcionalities to deal with proto serialization
