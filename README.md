@@ -23,3 +23,18 @@ This class is responsable to generate an entire proto schema representation  fro
 ![UML](https://go.gliffy.com/go/share/image/srk6lentbt23cfw41y9e.png?utm_medium=live-embed&utm_source=custom) 
 
 
+### Usage
+
+````
+// renders the proto schema in version 2
+
+ISchemaRender protoSchemaRender = new ProtoSchemaRender()
+
+ISchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder(protoSchemaRender);
+
+var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contains());
+
+String fullSchema = protoSchemaBuilder.BuildSchema(types);
+
+```
