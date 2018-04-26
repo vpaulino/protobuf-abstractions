@@ -24,7 +24,7 @@ namespace Protobuf.Schemas.Tests
             string actual = builder.BuildSchema(typeof(Root));
 
             Assert.NotNull(actual);
-            var actualResult = actual.Replace("\r\n", string.Empty).Replace(" ", string.Empty);
+            var actualResult = actual.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
             Assert.Equal(expected, actualResult);
              
 
@@ -52,7 +52,7 @@ namespace Protobuf.Schemas.Tests
             string actual = builder.BuildSchema(assembly);
 
             Assert.NotNull(actual);
-            var actualResult = actual.Replace("\r\n", string.Empty).Replace(" ", string.Empty);
+            var actualResult = actual.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
             Assert.Equal(expected, actualResult);
 
 
@@ -78,7 +78,7 @@ namespace Protobuf.Schemas.Tests
             string actual = builder.BuildSchema(assembly.GetTypes());
 
             Assert.NotNull(actual);
-            var actualResult = actual.Replace("\r\n", string.Empty).Replace(" ", string.Empty);
+            var actualResult = actual.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
             Assert.Equal(expected, actualResult);
 
 
