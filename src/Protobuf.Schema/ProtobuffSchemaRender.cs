@@ -25,15 +25,12 @@ namespace Protobuff.Schemas
         {
 
 
-            return InternalRender<T>();
-            
-        }
-
-        public string InternalRender<T>()
-        {
             string schema = ProtoBuf.Serializer.GetProto<T>(Sintax);
             return schema;
+
         }
+
+        
 
 
         
