@@ -1,5 +1,5 @@
 
-![Build Status](https://travis-ci.org/vpaulino/protobuf-abstractions.png?branch=master)](https://travis-ci.org/vpaulino/protobuf-abstractions?branch=master)
+![Build Status](https://travis-ci.org/vpaulino/protobuf-abstractions.png)](https://travis-ci.org/vpaulino/protobuf-abstractions)
 
 
 # protobuf-abstractions
