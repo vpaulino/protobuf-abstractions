@@ -1,5 +1,7 @@
 #addin nuget:https://www.nuget.org/api/v2/?package=Cake.DoInDirectory
 // #addin nuget:https://www.nuget.org/api/v2/?package=Cake.FileHelpers
+#tool "nuget:?package=xunit.runner.console"
+
 
 //////////////////////////////////////////////////////////////////////
 // CONFIGURATION
@@ -19,7 +21,10 @@ var PROJECTS_TO_PACK = new List<string>
 var target = Argument("target", "Build-AND-Test");
 var configuration = Argument("configuration", "Release");
 var nugetPreReleaseTag = Argument("nugetPreReleaseTag", "dev");
-
+var buildNumber =  Argument<int>("buildNumber",0);
+var versionSufix = "1.0.0";
+var pre = HasArgument("pre");
+var sourcePath = Argument<string>("sourcePath","./src");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -65,94 +70,66 @@ Task("Build")
         DotNetCoreBuild("ProtobufAbstractions.sln", dotNetBuildConfig);
     });
     
-Task("Nuget-Pack")
-    .Does(()=>{
-        EnsureDirectoryExists(preReleaseNugetPackagesDir);
-        EnsureDirectoryExists(releaseNugetPackagesDir);
-        
-        CleanDirectory(preReleaseNugetPackagesDir);
-        CleanDirectory(releaseNugetPackagesDir);
-                
-        var preReleaseSettings = new DotNetCorePackSettings{
-            Configuration = configuration,
-            OutputDirectory = preReleaseNugetPackagesDir,
-            VersionSuffix = nugetPreReleaseTag
-        };
-        var releaseSettings = new DotNetCorePackSettings{
-            Configuration = configuration,
-            OutputDirectory = releaseNugetPackagesDir
-        };
+Task("NugetPack")
+ .DoesForEach(GetFiles($"{sourcePath}/**/*.csproj"), (file) => 
+    {
+            var versionXPath = "/Project/PropertyGroup/VersionPrefix";
 
+            var versionSufix = XmlPeek(file.FullPath, versionXPath + "/text()");
 
-        // https://github.com/NuGet/Home/issues/4337
-        // While this issue is not fixed we need to specify the version suffix in the restore task.
+              var publishFolder =  releaseNugetPackagesDir ;
 
-        Action<DotNetCorePackSettings> packProjects = (settings) => {
-            var dotnetCoreRestoreSettings = new DotNetCoreRestoreSettings();
-            if (settings.VersionSuffix != null) {
-                dotnetCoreRestoreSettings.EnvironmentVariables = new Dictionary<string, string>()
-                {
-                    { "VersionSuffix", settings.VersionSuffix }
-                };
-            }
-                
-            foreach(var project in PROJECTS_TO_PACK){
-                var projectFolder = "./src/" + project;
-                DotNetCoreRestore(projectFolder, dotnetCoreRestoreSettings);
-                DotNetCorePack(projectFolder, settings);
-            }
-        };
+           if(pre)
+           {
+               // versionSufix = $"{versionSufix}-pre{buildNumber}";
+                publishFolder =  preReleaseNugetPackagesDir ;
+           }
 
-        packProjects(preReleaseSettings);
-        packProjects(releaseSettings);
-    });
+          
+              var settings = new DotNetCorePackSettings
+            {
+                Configuration = configuration,
+                OutputDirectory =  publishFolder,
+                NoDependencies = false,
+                NoRestore = true,
+               // VersionSuffix = versionSufix
+
+            };
+      
+            DotNetCorePack(file.FullPath, settings);                 
+             
+});
     
 Task("Run-Unit-Tests")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
         
-        var files = GetFiles("./tests/**/*.csproj");
+        var files = GetFiles("./tests/**/*Tests.csproj");
 
         int highestExitCode = 0;
 
         foreach (var file in files){
-            // While https://github.com/cake-build/cake/pull/1578 is not merged, 
-            // we need to start our own process to run dotnet xunit.
-            // Related: https://github.com/cake-build/cake/issues/1577
 
-            var processSettings = new ProcessSettings { 
-                Arguments = "xunit -trait \"TestCategory=\"Unit\"\"",
-                WorkingDirectory = file.GetDirectory()
-            };
-
-            if (IsRunningOnUnix()) {
-                var frameworks = XmlPeek(file, "/Project/PropertyGroup/TargetFrameworks/text()");
-                if (frameworks == null)
-                    frameworks = XmlPeek(file, "/Project/PropertyGroup/TargetFramework/text()");
-
-                if (frameworks == null || frameworks.Contains("netcoreapp") == false) {
-                    continue;
-                }
-                processSettings.Arguments.Append("-framework netcoreapp1.0");
-            }
-
-            var exitCode = StartProcess("dotnet", processSettings);
-
-            if(exitCode > highestExitCode)
-                highestExitCode = exitCode;
+            DotNetCoreTest(
+                file.FullPath,
+                new DotNetCoreTestSettings()
+                {
+                    Configuration = "Release",
+                    //NoBuild = true
+                });
+            
         }
-        
-        // Means there was an error
-        if(highestExitCode > 0 )
-            throw new Exception("Some tests failed.");
+         
     });
  
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
-
+Task("Full-Build")
+    .IsDependentOn("Build-AND-Test")
+    .IsDependentOn("NugetPack");
 
 Task("Build-AND-Test")
     .IsDependentOn("Build")
