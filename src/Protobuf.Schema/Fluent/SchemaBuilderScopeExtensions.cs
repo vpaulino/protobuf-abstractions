@@ -64,6 +64,7 @@ namespace Protobuff.Schemas.Fluent
 
         public static SchemaBuilderScope BuildSchema(this SchemaBuilderScope scope, ProtoBuf.Meta.ProtoSyntax sintax = ProtoBuf.Meta.ProtoSyntax.Proto2)
         {
+            
             ISchemaRender render = new ProtobuffSchemaRender(sintax);
             ProtoSchemaBuilder builder = new ProtoSchemaBuilder(render);
             string schema = builder.BuildSchema(scope.Types);
@@ -75,6 +76,8 @@ namespace Protobuff.Schemas.Fluent
 
         public static async Task WriteSchemaAsync(this SchemaBuilderScope scope, string filePath)
         {
+            if (string.IsNullOrWhiteSpace(scope.Schema))
+                return;
 
             using (var fileStream = new StreamWriter(filePath, true))
             {
@@ -82,6 +85,19 @@ namespace Protobuff.Schemas.Fluent
                 await fileStream.FlushAsync();
             }
             
+        }
+
+        public static async Task WriteSchemaAsync(this SchemaBuilderScope scope, Stream stream)
+        {
+            if (string.IsNullOrWhiteSpace(scope.Schema))
+                return;
+
+            using (var fileStream = new StreamWriter(stream))
+            {
+                await fileStream.WriteAsync(scope.Schema);
+                await fileStream.FlushAsync();
+            }
+
         }
     }
 }
