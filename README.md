@@ -20,7 +20,7 @@ This class is responsable to generate the proto schema string from a know type o
 This class is responsable to generate an entire proto schema representation  from an assembly or set of known types and return it in a string.
 
 
-![UML](https://go.gliffy.com/go/share/image/srk6lentbt23cfw41y9e.png?utm_medium=live-embed&utm_source=custom) 
+![UML_OO](https://go.gliffy.com/go/share/image/srk6lentbt23cfw41y9e.png?utm_medium=live-embed&utm_source=custom) 
 
 
 ### Usage
@@ -56,6 +56,14 @@ var otherASsemblies = LoadedFromDirectory();
 ````                     
                      
                      
+Some of the methods are available on a set of overloads as showned in the following diagram:
+
+![UML_Fluent](https://go.gliffy.com/go/share/image/s33x9h6el0erowtm4y5u.png?utm_medium=live-embed&utm_source=custom) 
+
+
+
+
+
 
 
 
