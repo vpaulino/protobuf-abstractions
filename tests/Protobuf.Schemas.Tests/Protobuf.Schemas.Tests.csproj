@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+	  <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +15,17 @@
     <ProjectReference Include="..\..\src\Protobuf.Schema\Protobuf.Schemas.csproj" />
     <ProjectReference Include="..\Protobuf.Schemas.Tests.Models\Protobuf.Schemas.Tests.Models.csproj" />
   </ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">
+		<PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+	</ItemGroup>
+
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+		<Reference Include="System" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+	
 
 </Project>

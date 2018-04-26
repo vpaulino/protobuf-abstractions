@@ -1,5 +1,4 @@
-#addin nuget:https://www.nuget.org/api/v2/?package=Cake.Docker&version=0.8.5
-#addin nuget:https://www.nuget.org/api/v2/?package=Cake.DoInDirectory&version=2.0.0
+#addin nuget:https://www.nuget.org/api/v2/?package=Cake.DoInDirectory
 // #addin nuget:https://www.nuget.org/api/v2/?package=Cake.FileHelpers
 
 //////////////////////////////////////////////////////////////////////
@@ -11,14 +10,13 @@ const string TESTER_SERVICE_INTEGRATION_TESTS = "integration-tester";
 var PROJECTS_TO_PACK = new List<string>
 {
     "Protobuf.Schemas",
-     
 };
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
-var target = Argument("target", "Full-Build");
+var target = Argument("target", "Build-AND-Test");
 var configuration = Argument("configuration", "Release");
 var nugetPreReleaseTag = Argument("nugetPreReleaseTag", "dev");
 
@@ -62,7 +60,7 @@ Task("Build")
             MSBuildSettings = new DotNetCoreMSBuildSettings()
         };
         
-        dotNetBuildConfig.MSBuildSettings.TreatAllWarningsAs = MSBuildTreatAllWarningsAs.Error;
+       // dotNetBuildConfig.MSBuildSettings.TreatAllWarningsAs = MSBuildTreatAllWarningsAs.Error;
 
         DotNetCoreBuild("ProtobufAbstractions.sln", dotNetBuildConfig);
     });
@@ -162,7 +160,7 @@ Task("Build-AND-Test")
 
 
 Task("TravisCI")
-    .IsDependentOn("Build-AND-Test")
+    .IsDependentOn("Build-AND-Test");
     
 
 Task("Default")
