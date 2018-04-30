@@ -1,3 +1,7 @@
+
+[![Build Status](https://api.travis-ci.org/vpaulino/protobuf-abstractions.svg?branch=master)](https://travis-ci.org/vpaulino/protobuf-abstractions)
+
+
 # protobuf-abstractions
 a set of funcionalities to deal with proto serialization
 
