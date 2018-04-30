@@ -1,19 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  
 	<PropertyGroup>
-		<Description>Generates proto schemas from a .NET Assembly.</Description>
+		<Description>Serializes and deserialized .NET Assembly type instances.</Description>
 		<VersionPrefix>1.0.0</VersionPrefix>
 		<TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<AssemblyName>Protobuf.Schemas</AssemblyName>
-		<PackageId>Protobuf.Schemas</PackageId>
+		<AssemblyName>Serialization.Proto.Serializer</AssemblyName>
+		<PackageId>Protobuf.Serializer</PackageId>
 		<PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Vitor Paulino</Authors>
-		<PackageTags>protobuf donet schemas</PackageTags>
+		<PackageTags>protobuf donet serializer</PackageTags>
+		<RootNamespace>Serialization.Proto.Serializer</RootNamespace>
 	</PropertyGroup>
-	
+
   <ItemGroup>
     <PackageReference Include="protobuf-net" Version="2.3.7" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Protobuf.Serializer
+namespace Serialization.Proto.Serializer
 {
     /// <summary>
     /// Serialize and deserializes instances of objects to byte[] protobuff format

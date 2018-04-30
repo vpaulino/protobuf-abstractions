@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Protobuff.Schemas
+namespace Serialization.Proto.Schemas
 {
     public class ProtoSchemaBuilder : ISchemaBuilder
     {

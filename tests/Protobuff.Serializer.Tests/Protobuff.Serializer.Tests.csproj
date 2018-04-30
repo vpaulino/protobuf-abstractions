@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		
-		<ProjectReference Include="..\..\Protobuf.Serializer\Protobuf.Serializer.csproj" />
+		<ProjectReference Include="..\..\src\Serialization.Proto.Serialization\Serialization.Proto.Serializer.csproj" />
 		
 		<ProjectReference Include="..\Protobuf.Schemas.Tests.Models\Protobuf.Schemas.Tests.Models.csproj" />
 	</ItemGroup>

@@ -6,7 +6,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Protobuff.Schemas.Fluent
+namespace Serialization.Proto.Schemas.Fluent
 {
     public static class SchemaBuilderScopeExtensions
     {
