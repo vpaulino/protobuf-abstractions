@@ -25,6 +25,7 @@ var buildNumber =  Argument<int>("buildNumber",0);
 var versionSufix = "1.0.0";
 var pre = HasArgument("pre");
 var sourcePath = Argument<string>("sourcePath","./src");
+var solutionName = "Abstractions.sln";
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -52,7 +53,7 @@ Task("Clean")
 Task("Restore-NuGet-Packages")
     .Does(() =>
     {
-        DotNetCoreRestore("ProtobufAbstractions.sln");
+        DotNetCoreRestore(solutionName);
     });
 
 Task("Build")
@@ -67,7 +68,7 @@ Task("Build")
         
        // dotNetBuildConfig.MSBuildSettings.TreatAllWarningsAs = MSBuildTreatAllWarningsAs.Error;
 
-        DotNetCoreBuild("ProtobufAbstractions.sln", dotNetBuildConfig);
+        DotNetCoreBuild(solutionName, dotNetBuildConfig);
     });
     
 Task("NugetPack")
