@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Protobuff.Schemas
+namespace Serialization.Proto.Schemas
 {
     public interface ISchemaRender
     {

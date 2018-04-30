@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+		<PackageReference Include="xunit" Version="2.3.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+		<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		
+		<ProjectReference Include="..\..\src\Serialization.Proto.Serialization\Serialization.Proto.Serializer.csproj" />
+		
+		<ProjectReference Include="..\Protobuf.Schemas.Tests.Models\Protobuf.Schemas.Tests.Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+		<PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+	</ItemGroup>
+
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+		<Reference Include="System" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+
+</Project>

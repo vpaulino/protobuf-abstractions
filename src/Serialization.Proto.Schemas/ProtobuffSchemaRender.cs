@@ -3,8 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Linq;
+using ProtoBuf;
 
-namespace Protobuff.Schemas
+namespace Serialization.Proto.Schemas
 {
     public class ProtobuffSchemaRender : ISchemaRender
     {
