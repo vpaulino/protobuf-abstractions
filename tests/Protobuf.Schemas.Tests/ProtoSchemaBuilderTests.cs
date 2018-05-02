@@ -40,7 +40,36 @@ namespace Protobuf.Schemas.Tests
 
             ProtoSchemaBuilder builder = new ProtoSchemaBuilder(schemaRender);
 
-            string actual = builder.BuildSchema(typeof(ClassWithEnumProperty));
+            var assemblyFile = Directory.GetFiles(Environment.CurrentDirectory).Where((fileName)=> fileName.Contains("Protobuf.Schemas.Tests.Models")).FirstOrDefault();
+
+            var assembly = Assembly.LoadFrom(assemblyFile);
+
+
+            string actual = builder.BuildSchema(assembly);
+
+            Assert.NotNull(actual);
+            var actualResult = actual.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);
+            Assert.Equal(expected, actualResult);
+
+
+        }
+
+        [Fact]
+        [Trait("TestCategory", "Unit")]
+        public void BuildSchema_FromAssembly_FilteredByName()
+        {
+
+            string expected = @"syntax=""proto2"";packageProtobuf.Schemas.Tests.Models;messageClassWithEnumProperty{optionalint32Id=1[default=0];optionalstringName=2;optionalEnumValuesValueEnum=12[default=None];}enumEnumValues{//thisisacomposite/flagsenumerationNone=0;Multiple=1;Scene=2;Scan=4;Face=8;Voice=16;Iris=32;}".Replace(" ", string.Empty);
+            ProtobuffSchemaRender schemaRender = new ProtobuffSchemaRender(ProtoBuf.Meta.ProtoSyntax.Proto2);
+
+            ProtoSchemaBuilder builder = new ProtoSchemaBuilder(schemaRender);
+
+            var assemblyFile = Directory.GetFiles(Environment.CurrentDirectory).Where((fileName) => fileName.Contains("Protobuf.Schemas.Tests.Models")).FirstOrDefault();
+
+            var assembly = Assembly.LoadFrom(assemblyFile);
+
+
+            string actual = builder.BuildSchema(assembly);
 
             Assert.NotNull(actual);
             var actualResult = actual.Replace(Environment.NewLine, string.Empty).Replace(" ", string.Empty);

@@ -7,6 +7,14 @@ using System.Xml.Serialization;
 
 namespace Protobuf.Schemas.Tests.Models
 {
+    public static class EnumValuesExtensions
+    {
+        public static IEnumerable<EnumValues> EnumValuess(this EnumValues[] position, EnumValues[] missingEyes)
+        {
+            return new List<EnumValues>();
+        }
+    }
+
 
     [XmlType("EnumValues")]
     [Flags]
