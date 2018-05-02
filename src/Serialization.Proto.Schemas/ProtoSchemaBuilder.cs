@@ -60,9 +60,18 @@ namespace Serialization.Proto.Schemas
 
         private IEnumerable<string> ParseTypeAndRelatedMessages(Type typeInfo)
         {
+            string FixToken(string token)
+            {
+                if (token.TrimStart().StartsWith("enum") || token.TrimStart().StartsWith("message"))
+                    return token;
+            
+
+                return $"{Environment.NewLine}message {token}";
+            }            
+
             var schemaRelatedTypes = schemaRender.RenderBody(typeInfo);
-            var bodyTypes = schemaRelatedTypes.Split(new string[] { $"{Environment.NewLine}message" }, StringSplitOptions.RemoveEmptyEntries)
-                                                .Select<string, string>((stringToken) => string.IsNullOrWhiteSpace(stringToken) ? string.Empty : $"{Environment.NewLine}message {stringToken}")
+            var bodyTypes = schemaRelatedTypes.Split(new string[] { $"{Environment.NewLine}message " }, StringSplitOptions.RemoveEmptyEntries)
+                                                .Select<string, string>((stringToken) => string.IsNullOrWhiteSpace(stringToken) ? string.Empty : FixToken(stringToken))
                                                 .Where(line => !string.IsNullOrWhiteSpace(line));
             return bodyTypes;
         }

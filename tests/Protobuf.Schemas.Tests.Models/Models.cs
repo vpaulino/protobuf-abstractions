@@ -8,6 +8,33 @@ using System.Xml.Serialization;
 namespace Protobuf.Schemas.Tests.Models
 {
 
+    [XmlType("EnumValues")]
+    [Flags]
+    public enum EnumValues
+    {
+        None = 0x00000000,
+        Multiple = 0x00000001,
+        Scene = 0x00000002,
+        Scan = 0x00000004,
+        Face = 0x00000008,
+        Voice = 0x00000010,
+        Iris = 0x00000020
+
+    }
+
+    [ProtoBuf.ProtoContract]
+    public class ClassWithEnumProperty
+    {
+        [ProtoBuf.ProtoMember(tag: 1)]
+        public int Id { get; set; }
+
+        [ProtoBuf.ProtoMember(tag: 2)]
+        public string Name { get; set; }
+
+        [ProtoBuf.ProtoMember(tag: 12)]
+        public EnumValues ValueEnum { get; set; }
+    }
+
     [ProtoBuf.ProtoContract]
     public class Root
     {
@@ -16,6 +43,10 @@ namespace Protobuf.Schemas.Tests.Models
 
         [ProtoBuf.ProtoMember(tag: 2)]
         public string Name { get; set; }
+
+        //[ProtoBuf.ProtoMember(tag: 12)]
+        //public EnumValues ValueEnum { get; set; }
+
 
     }
 

@@ -142,7 +142,7 @@ Task("TravisCI")
     
 
 Task("Default")
-    .IsDependentOn("Build-AND-Test");
+    .IsDependentOn("Full-Build");
     
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
