@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Serialization.Proto.Schemas.Settings;
 
 namespace Serialization.Proto.Schemas
 {
@@ -12,7 +13,7 @@ namespace Serialization.Proto.Schemas
     {
 
         ISchemaRender schemaRender;
-
+        BuilderSettings settings = new BuilderSettings(); 
      
         public ProtoSchemaBuilder()
         {
@@ -22,6 +23,18 @@ namespace Serialization.Proto.Schemas
         public ProtoSchemaBuilder(ISchemaRender schemaProducer)
         {
             this.schemaRender = schemaProducer;
+        }
+
+        public ProtoSchemaBuilder(BuilderSettings settings) : this()
+        {
+            this.settings = settings;
+
+        }
+
+        public ProtoSchemaBuilder(ISchemaRender schemaProducer, BuilderSettings settings) : this(schemaProducer)
+        {
+            this.settings = settings;
+
         }
 
         protected virtual string Build(HashSet<string> headers, HashSet<string> bodySchema)
@@ -41,14 +54,64 @@ namespace Serialization.Proto.Schemas
 
         protected virtual void ParseTypeSchema(Type typeInfo, ref HashSet<string> existingHeaders, ref HashSet<string> body)
         {
+
+            if (ExcludeType(typeInfo))
+                return;
+                
             IEnumerable<string> headersByLine = ParseHeaders(typeInfo);
 
-            Save(ref existingHeaders, headersByLine);
+            IEnumerable<string> headers = ExecuteTransformers(typeInfo, headersByLine, settings.HeadersTransformers);
+
+            Save(ref existingHeaders, headers);
 
             IEnumerable<string> bodyTypes = ParseTypeAndRelatedMessages(typeInfo);
 
-            Save(ref body, bodyTypes);
+            IEnumerable<string>  bodyMessages = ExecuteTransformers(typeInfo, bodyTypes, settings.BodyMessagesTransformers);
+            
+            Save(ref body, bodyMessages);
 
+        }
+
+        private IEnumerable<string> ExecuteTransformers(Type typeInfo, IEnumerable<string> tokens, IEnumerable<ITransformer> transformers)
+        {
+            
+            IEnumerable<string> output = null;
+
+            var transformersSelected = transformers.Where((transf) => transf.TargetType == null || transf.TargetType.Equals(typeInfo));
+
+            if (transformersSelected.Count() == 0)
+                return tokens;
+
+            List<string> tokensProcessed = new List<string>();
+            foreach (var transformersToExecute in transformersSelected)
+            {
+                if (transformersToExecute.TryTransform(tokens, out output))
+                {
+                    tokensProcessed.AddRange(output);
+                }
+                else
+                {
+                    tokensProcessed.AddRange(tokens);
+                }
+                
+            }
+           
+
+            return tokensProcessed;
+        }
+
+         
+
+        private bool ExcludeType(Type type)
+        {
+            var result = false;
+            var exclusionRules = settings.Rules.Where((rule) => rule.Type == RuleType.Exclude);
+            foreach (var rule in exclusionRules)
+            {
+              result |= rule.Predicate(type);
+            }
+
+            return result;
         }
 
         private IEnumerable<string> ParseHeaders(Type typeInfo)
@@ -60,19 +123,11 @@ namespace Serialization.Proto.Schemas
 
         private IEnumerable<string> ParseTypeAndRelatedMessages(Type typeInfo)
         {
-            string FixToken(string token)
-            {
-                if (token.TrimStart().StartsWith("enum") || token.TrimStart().StartsWith("message"))
-                    return token;
-            
-
-                return $"{Environment.NewLine}message {token}";
-            }            
-
+          
             var schemaRelatedTypes = schemaRender.RenderBody(typeInfo);
-            var bodyTypes = schemaRelatedTypes.Split(new string[] { $"{Environment.NewLine}message " }, StringSplitOptions.RemoveEmptyEntries)
-                                                .Select<string, string>((stringToken) => string.IsNullOrWhiteSpace(stringToken) ? string.Empty : FixToken(stringToken))
-                                                .Where(line => !string.IsNullOrWhiteSpace(line));
+
+            var bodyTypes = new List<string>() { schemaRelatedTypes };
+
             return bodyTypes;
         }
 
@@ -82,11 +137,11 @@ namespace Serialization.Proto.Schemas
             {
                 try
                 {
-                    string trimmedValue = value.Trim();
+                    string trimmedValue = value.Trim().TrimStart().TrimEnd();
 
                     if (string.IsNullOrWhiteSpace(trimmedValue))
                         continue;
-                    //if (!existingHeaders.Contains(singleHeaderEntry))
+                    
                     container.Add(Environment.NewLine);
                    
                     container.Add(trimmedValue);
@@ -128,8 +183,7 @@ namespace Serialization.Proto.Schemas
             foreach (var typeInfo in typesInfo)
             {
                 ParseTypeSchema(typeInfo, ref headers, ref bodySchema);
-            }
-        
+            }       
              
             string finalSchema = Build(headers, bodySchema);
             return finalSchema;
@@ -138,7 +192,7 @@ namespace Serialization.Proto.Schemas
 
         public virtual string BuildSchema(Assembly assembly)
         {
-            assembly.GetTypes();
+          
             var schema = BuildSchema(assembly.GetTypes().Select<Type, TypeInfo>((t)=> t.GetTypeInfo()));
             return schema;
         }
