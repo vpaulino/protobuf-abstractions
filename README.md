@@ -1,33 +1,55 @@
 
 [![Build Status](https://api.travis-ci.org/vpaulino/protobuf-abstractions.svg?branch=master)](https://travis-ci.org/vpaulino/protobuf-abstractions)
 
-
-# protobuf-abstractions
-a set of funcionalities to deal with proto serialization
-
+ 
 # Protobuf-Abstractions
 
-This is a set of classes that abstract the usage of protobuf funcionalities. This library makes available those funcionalities in two flavors:
+This is a set of classes and interfaces that abstract the usage of protobuf funcionalities. 
+
+# Requirements
+
+* .NetStandard >= 2.0
+* .Net >= 4.5.1
+* protobuf-net >=2.3.7
+
+# Serialization.Proto.Schemas
+
+This library makes available a set of functionalities to generate proto schema from .NET Types. The set of funcionalities comes in two flavors: 
+
 1. Object Oriented
 2. Fluent API
 
-## Object Oriented
+## Entities
 
-The set of entities that make this flavour available is the one presented in picture 1 that belong to namespace Protobuf.Schemas. 
-
-### ProtobuffSchemaRender
-
-This class is responsable to generate the proto schema string from a know type or parse from a type just the headers or the messages generated from that type.
-
-### ProtobufSchemaBuilder
-
-This class is responsable to generate an entire proto schema representation  from an assembly or set of known types and return it in a string.
+The set of entities available is the one presented in picture 1 that belong to namespace Serialization.Proto.Schemas. 
 
 
 ![UML_OO](https://go.gliffy.com/go/share/image/srk6lentbt23cfw41y9e.png?utm_medium=live-embed&utm_source=custom) 
 
+### BuilderSettings
 
-### Usage
+This class is responsible to parameterize the Builder execution.
+
+### BuilderRule
+
+This class represents a rule that as a Type to be evaluated using is Predicate during a build of a schema.
+
+### ITransformer
+
+This interface represents a contract to transform proto schemas of a certain type. There are two properties in the BuilderSettings that allows the programmer to register their own Transformers. 
+
+### ProtobuffSchemaRender
+
+This class is responsible to generate the proto schema string from a know type or parse from a type just the headers or the messages generated from that type.
+
+### ProtobufSchemaBuilder
+
+This class is responsible to generate an entire proto schema representation  from an assembly or set of known types and return it in a string.
+
+
+
+### Samples
+ 
 
 ````
 // renders the proto schema in version 2

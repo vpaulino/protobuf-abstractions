@@ -193,7 +193,7 @@ namespace Serialization.Proto.Schemas
         public virtual string BuildSchema(Assembly assembly)
         {
           
-            var schema = BuildSchema(assembly.GetTypes().Select<Type, TypeInfo>((t)=> t.GetTypeInfo()));
+            var schema = BuildSchema(assembly.GetTypes());
             return schema;
         }
 

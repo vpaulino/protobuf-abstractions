@@ -74,6 +74,19 @@ namespace Serialization.Proto.Schemas.Fluent
 
         }
 
+        public static SchemaBuilderScope BuildSchema(this SchemaBuilderScope scope, Settings.BuilderSettings settings, ProtoBuf.Meta.ProtoSyntax sintax = ProtoBuf.Meta.ProtoSyntax.Proto2)
+        {
+
+            ISchemaRender render = new ProtobuffSchemaRender(sintax);
+            ProtoSchemaBuilder builder = new ProtoSchemaBuilder(render, settings);
+            string schema = builder.BuildSchema(scope.Types);
+
+            scope.Schema = schema;
+            return scope;
+
+        }
+
+
         public static async Task WriteSchemaAsync(this SchemaBuilderScope scope, string filePath)
         {
             if (string.IsNullOrWhiteSpace(scope.Schema))
