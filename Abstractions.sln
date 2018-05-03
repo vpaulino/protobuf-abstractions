@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protobuff.Serializer.Tests", "tests\Protobuff.Serializer.Tests\Protobuff.Serializer.Tests.csproj", "{357B0128-8EFB-4C73-8899-852280148295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protobuff.Serializer.Tests", "tests\Protobuff.Serializer.Tests\Protobuff.Serializer.Tests.csproj", "{357B0128-8EFB-4C73-8899-852280148295}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serialization.Proto.Schemas", "src\Serialization.Proto.Schemas\Serialization.Proto.Schemas.csproj", "{7791B02F-A0A6-414E-BA78-08890A70EF4F}"
 EndProject
