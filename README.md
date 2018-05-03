@@ -50,6 +50,7 @@ This class is responsible to generate an entire proto schema representation  fro
 
 ### Samples
  
+#### Building a proto 2 Schemas
 
 ````
 // renders the proto schema in version 2
@@ -64,6 +65,92 @@ var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contai
 String fullSchema = protoSchemaBuilder.BuildSchema(types);
 
 ````
+
+#### Building a proto 3 Schemas
+
+````
+// renders the proto schema in version 3
+
+ISchemaRender protoSchemaRender = new ProtobuffSchemaRender(ProtoBuf.Meta.ProtoSyntax.Proto3)
+
+ISchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder(protoSchemaRender);
+
+var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contains("MyModelNamespace"));
+
+String fullSchema = protoSchemaBuilder.BuildSchema(types);
+
+````
+ 
+ 
+#### Building a proto 3 Schemas with an exclusion Rule
+
+````
+// renders the proto schema in version 3
+
+ISchemaRender protoSchemaRender = new ProtobuffSchemaRender(ProtoBuf.Meta.ProtoSyntax.Proto3)
+
+BuilderSettings settings = new BuilderSettings();
+settings.Rules.Add(new BuilderRule() 
+{
+   Predicate = (type) => // type evaluation to exclude the generation of this type schema
+   Type = RuleType.Exclude
+});
+
+ISchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder(protoSchemaRender,settings);
+
+var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contains("MyModelNamespace"));
+
+String fullSchema = protoSchemaBuilder.BuildSchema(types);
+
+````
+
+
+#### Building Schemas with a custom transformer to a certain type
+
+````
+
+public class CustomTransformer : Serialization.Proto.Schemas.ITransformer 
+{
+  
+  Type TargetType {get; private Set}
+  
+  bool TryTransform(IEnumerable<string> inputTokens, out IEnumerable<string> outputTokens)
+  {
+	 // logic to change the inputTokens here and return the result in the outputTokens. If any transformation occours then it should return true, else it should be false
+  }
+
+}
+
+
+````
+
+````
+// renders the proto schema in version 3
+
+ISchemaRender protoSchemaRender = new ProtobuffSchemaRender(ProtoBuf.Meta.ProtoSyntax.Proto3)
+
+BuilderSettings settings = new BuilderSettings();
+settings.Rules.Add(new BuilderRule() 
+{
+   Predicate = (type) => // type evaluation to exclude the generation of this type schema
+   Type = RuleType.Exclude
+});
+
+settings.BodyMessagesTransformers.Add(new CustomTransformer());
+
+ISchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder(protoSchemaRender,settings);
+
+var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+var types = assemblies.FirstOrDefault().GetTypes().Where(t => t.Namespace.Contains("MyModelNamespace"));
+
+String fullSchema = protoSchemaBuilder.BuildSchema(types);
+
+````
+
+ 
+
 
 ## FluentApi 
 
