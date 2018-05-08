@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <AssemblyName>Abstractions.Tools</AssemblyName>
+    <RootNamespace>Abstractions.Tools</RootNamespace>
+	  <Description>Set of utilities types to process schemas and serialization in bulk to file storage.</Description>
+	  <VersionPrefix>1.0.0</VersionPrefix>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <Authors>Vitor Paulino</Authors>
+	  <PackageTags>protobuf donet schemas</PackageTags>
+	  <RootNamespace>Abstractions.Tools</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Serialization.Proto.Schemas\Serialization.Proto.Schemas.csproj" />
+    <ProjectReference Include="..\Serialization.Proto.Serialization\Serialization.Proto.Serializer.csproj" />
+  </ItemGroup>
+
+</Project>
